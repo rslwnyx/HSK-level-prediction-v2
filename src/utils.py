@@ -45,6 +45,9 @@ def load_hsk_data(file_path):
 
             regex_pattern = re.sub(r'\s*[A-Z]+\s*', '.+', safe_pattern)
 
+            if not re.search(r'[\u4e00-\u9fff]', regex_pattern):
+                continue
+
             grammar_patterns.append((regex_pattern, clamp_level(level)))
 
     return word_dict, grammar_patterns

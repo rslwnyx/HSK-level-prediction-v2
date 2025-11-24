@@ -101,11 +101,14 @@ def main():
     y_train_pred =best_model.predict(X_train)
 
     #Threshold Calibration
-    _, raw_bins = pd.qcut(y_train_pred, q=6, retbins=True, labels=False, duplicates="drop")
-    if len(raw_bins) < 7: raw_bins = np.linspace(0, 500, 7)
-    final_thresholds = raw_bins.copy()
-    final_thresholds[0] = 0.0  #Lowest possible score
-    final_thresholds[-1] = 500.0  #Highest possible score
+    # HSK 1: 0 - 150
+    # HSK 2: 150 - 220
+    # HSK 3: 220 - 290
+    # HSK 4: 290 - 360  (Ortalama yığılmanın olduğu yer)
+    # HSK 5: 360 - 430
+    # HSK 6: 430 - 500
+    
+    final_thresholds = np.array([0.0, 150.0, 220.0, 290.0, 360.0, 430.0, 500.0])
     
 
     #Artifact saving
