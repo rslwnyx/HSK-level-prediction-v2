@@ -3,7 +3,7 @@ import joblib
 import numpy as np
 import scipy.sparse as sp
 import jieba
-from src.utils import clean_chinese_text, extract_hsk_features
+from src.utils import clean_chinese_text, extract_hsk_features, hsk_tokenizer
 
 st.set_page_config(page_title="HSK AI Predictor", page_icon="🇨🇳", layout="centered")
 
@@ -57,10 +57,18 @@ def main():
                 with c2:
                     st.metric("Model Score (0-500)", f"{pred_score:.1f}")
                 
+                st.subheader("Mathematical Analysis")
+                c3, c4 = st.columns(2)
+                with c3:
+                    st.metric("Sentence Length", f"{int(stat_feats[-2])} words")
+                with c4:
+                    st.metric("Weighted Complexity Index", f"{stat_feats[-1]:.2f}")
+                    st.caption("(Higher = More vocab difficulty)")
+                
 
                 st.subheader("Detected Structures")
                 
-                hsk_dist = {f"HSK{i} percentage": stat_feats[i-1] for i in range(1, 7)}
+                hsk_dist = {f"HSK{i} density": stat_feats[i-1] for i in range(1, 7)}
                 st.bar_chart(hsk_dist)
                 
                 tokens = jieba.lcut(clean_text)
