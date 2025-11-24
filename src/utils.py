@@ -68,6 +68,13 @@ def extract_hsk_features(text, word_dict, grammar_patterns):
     features = [level_counts[i] / total_words for i in range(1, 7)]
     features.append(total_words)
     
+    weighted_score = 0
+    for lvl in range(1, 7):
+        weight = lvl * lvl 
+        weighted_score += level_counts[lvl] * weight
+        
+    features.append(weighted_score / total_words)
+
     return features
 
 def hsk_tokenizer(text):
