@@ -32,10 +32,10 @@ def main():
         y = joblib.load(cache_y)
         tfidf = joblib.load(cache_tfidf)
     
-        word_dict, grammar_patterns = load_hsk_data('data/hsk_data_v2.csv')
+        word_dict, grammar_patterns = load_hsk_data(r"data\hsk_data.csv")
         
     else:
-        print("🐢 Cache not found. Starting heavy calculation (Regex & Tokenization)...")
+        print("Cache not found. Starting heavy calculation (Regex & Tokenization)...")
         
         # Load Raw Data
         try:
