@@ -64,7 +64,7 @@ def main():
     joblib.dump(tfidf, r'models/tfidf_vectorizer.pkl')
     joblib.dump(final_thresholds, r'models/hsk_thresholds.pkl')
 
-    joblib.dump((word_dict, grammar_patterns), r'models/hsk_assets.pkl')
+    joblib.dump((word_dict, grammar_patterns), r'models/hsk_assets.pkl', compress=3)
 
 
 if __name__ == "__main__":
