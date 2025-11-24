@@ -66,7 +66,7 @@ def extract_hsk_features(text, word_dict, grammar_patterns):
     for pattern, lvl in grammar_patterns:
         if re.search(pattern, text):
             if 1 <= lvl <= 6:
-                level_counts[lvl] += 2 
+                level_counts[lvl] += 15
     
 
     features = [level_counts[i] / total_words for i in range(1, 7)]
