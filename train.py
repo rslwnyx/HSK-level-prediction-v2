@@ -21,7 +21,7 @@ def main():
     cache_dir = 'cache'
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
-    cache_X = os.path.join(cache_dir, 'X_final.pkl')
+    cache_X = os.path.join(cache_dir, 'X_final_weighted.pkl')
     cache_y = os.path.join(cache_dir, 'y.pkl')
     cache_tfidf = os.path.join(cache_dir, 'tfidf_fitted.pkl')
 

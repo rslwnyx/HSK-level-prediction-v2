@@ -41,7 +41,7 @@ def load_hsk_data(file_path):
 
             regex_pattern = re.sub(r'\s*[A-Z]+\s*', '.+', safe_pattern)
 
-            grammar_patterns.append((regex_pattern, level))
+            grammar_patterns.append((regex_pattern, lambda level: min(level, 6)))
 
     return word_dict, grammar_patterns
 
