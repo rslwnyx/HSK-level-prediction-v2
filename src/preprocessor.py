@@ -14,7 +14,7 @@ class Preprocessor:
         return clean_text
 
     @staticmethod
-    def segment_text(text):
+    def tokenize(text):
         return jieba.lcut(text)
 
     @staticmethod
