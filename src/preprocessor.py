@@ -6,7 +6,6 @@ class Preprocessor:
     def __init__(self, user_dict_path=None):
         if user_dict_path:
             jieba.load_userdict(user_dict_path)
-        pass
     
     @staticmethod
     def clean_text(text):
