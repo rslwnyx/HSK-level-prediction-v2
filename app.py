@@ -1,29 +1,41 @@
+import os
 import streamlit as st
 import joblib
-import numpy as np
 import scipy.sparse as sp
 import jieba
-from src.utils import clean_chinese_text, extract_hsk_features, hsk_tokenizer
+from src.utils import clean_chinese_text, extract_hsk_features
+import numpy as np
 
 st.set_page_config(page_title="HSK AI Predictor", page_icon="🇨🇳", layout="centered")
+
+BASE_DIR = os.path.dirname(__file__)  # app.py’nin bulunduğu klasör
+MODELS_DIR = os.path.join(BASE_DIR, "models")
 
 
 @st.cache_resource
 def load_model_assets():
-    classifier = joblib.load(r'models/hsk_classifier.pkl')
-    tfidf = joblib.load(r'models/tfidf_vectorizer.pkl')
-    word_dict, grammar_patterns = joblib.load(r'models/hsk_assets.pkl')
-    return classifier, tfidf, word_dict, grammar_patterns
+    try:
+        classifier = joblib.load(r"models\hsk_regressor.pkl")
+        tfidf = joblib.load(r"models/tfidf_vectorizer.pkl")
+        
+        word_dict, grammar_patterns = joblib.load(r"models/hsk_assets.pkl")
+
+        return classifier, tfidf, word_dict, grammar_patterns
+
+    except Exception as e:
+        st.error(f"Model loading error: {e}")
+        return None, None, None, None
 
 
 def main():
     st.title("🇨🇳 HSK LEVEL PREDICTOR AI")
 
-    try:
-        model, tfidf, thresholds, w_dict, g_patterns = load_model_assets()
-    except FileNotFoundError:
+    model, tfidf, w_dict, g_patterns = load_model_assets()
+
+    if model is None:
         st.error("Please run train.py first.")
         st.stop()
+
 
     #User Input
     user_text = st.text_area("Enter a chinese sentence:", height=150, placeholder="我觉得学习汉语很有意思...")
