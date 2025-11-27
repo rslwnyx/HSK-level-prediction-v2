@@ -3,20 +3,16 @@ import jieba
 import re
 import sys
 import os
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from config import HSK_DATA_PATH, HSK_COMP_PATH
-from preprocessor import Preprocessor
+from src.config import HSK_DATA_PATH
 
 class VocabAnalyzer:
-    def __init__(self, user_dict_path=None):
-        if user_dict_path:
-            jieba.load_userdict(user_dict_path)
-        self.vocab_data = self.load_vocab_data(HSK_DATA_PATH)
-        self.hsk_compositions = pd.read_csv(HSK_COMP_PATH)
+    def __init__(self):
+        self.vocab_db : dict[str, int] = {}
+        self.load_data()
 
-    @staticmethod
-    def load_vocab_data(hsk_data_path):
+
+    def load_vocab_data(self, hsk_data_path):
         df = pd.read_csv(hsk_data_path)
         df.columns = ['phrase','level','type']
         word_dict = {}
@@ -34,15 +30,13 @@ class VocabAnalyzer:
 
         return word_dict
 
-    @staticmethod
-    def get_word_level(word, vocab_data):
+    def get_word_level(self, word, vocab_data):
         if word in vocab_data:
             return vocab_data[word]
         else:
             return 0
         
-    @staticmethod
-    def analyze(tokens, vocab_data):
+    def analyze(self, tokens, vocab_data):
         total_words, total_hsk_score = 0, 0,
         level_counts = {"HSK1": 0, "HSK2": 0, "HSK3": 0, "HSK4": 0, "HSK5": 0, "HSK6": 0}
         for token in tokens:
