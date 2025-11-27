@@ -10,16 +10,13 @@ from preprocessor import Preprocessor
 
 class GrammarAnalyzer:
     def __init__(self, user_dict_path=None):
-        if user_dict_path:
-            jieba.load_userdict(user_dict_path)
         self.grammar_rules = []
         self.grammar_data = self.load_grammar_data(HSK_DATA_PATH)
-        self.hsk_compositions = pd.read_csv(HSK_COMP_PATH)
 
     def load_grammar_data(self, hsk_data_path):
         df = pd.read_csv(hsk_data_path)
         df.columns = ['phrase','level','type']
-        word_dict = {}
+
         for _, row in df.iterrows():
             phrase = str(row['phrase']).strip()
             try:
@@ -38,13 +35,11 @@ class GrammarAnalyzer:
                 if not has_chinese or is_empty:
                     continue
 
-                self.grammar_rules.append((safe_phrase, level))
+                self.grammar_rules.append((safe_phrase, min(6, level)))
         
         return self.grammar_rules
     
     def analyze_sentence(self, sentence):
-        sentence = Preprocessor.clean_text(sentence)
-        sentence_score = 0
         matched_rules = []
 
         for rule, level in self.grammar_data:

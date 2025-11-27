@@ -8,9 +8,7 @@ from src.config import HSK_DATA_PATH
 
 class VocabAnalyzer:
     def __init__(self):
-        self.vocab_db : dict[str, int] = {}
-        self.load_data()
-
+        self.vocab_data = self.load_vocab_data(HSK_DATA_PATH)
 
     def load_vocab_data(self, hsk_data_path):
         df = pd.read_csv(hsk_data_path)
