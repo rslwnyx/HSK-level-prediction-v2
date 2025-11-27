@@ -9,7 +9,7 @@ from config import HSK_DATA_PATH, HSK_COMP_PATH
 from preprocessor import Preprocessor
 
 class GrammarAnalyzer:
-    def __init__(self, user_dict_path=None):
+    def __init__(self):
         self.grammar_rules = []
         self.grammar_data = self.load_grammar_data(HSK_DATA_PATH)
 
@@ -41,6 +41,7 @@ class GrammarAnalyzer:
     
     def analyze_sentence(self, sentence):
         matched_rules = []
+        sentence_score = 0
 
         for rule, level in self.grammar_data:
             if rule in sentence:

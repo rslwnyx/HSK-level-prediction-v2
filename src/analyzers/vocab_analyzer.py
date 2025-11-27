@@ -28,7 +28,8 @@ class VocabAnalyzer:
 
         return word_dict
 
-    def get_word_level(self, word, vocab_data):
+    @staticmethod
+    def get_word_level( word, vocab_data):
         if word in vocab_data:
             return vocab_data[word]
         else:

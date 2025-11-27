@@ -25,11 +25,15 @@ col_names = ["composition_id", "nationality", "gender", "exam_date",
 
 def load_data():
     df = pd.read_csv(HSK_COMP_PATH, names=col_names)
-    df.columns = col_names
     return df
 
 def derive_labels_from_scores(df):
-    df['label'] = pd.qcut(df['total_score'], q=6, labels=[1, 2, 3, 4, 5, 6])
+    df.copy()
+    df['total_score'] = pd.to_numeric(df['total_score'], errors='coerce')
+    df = df.dropna(subset=['total_score'])
+    df['total_score'] = df['total_score'].astype(float)
+
+    df['hsk_label'] = pd.qcut(df['total_score'], q=6, labels=[1, 2, 3, 4, 5, 6])
     return df
 
 def extract_features(text, vocab, grammar, prep):
@@ -55,7 +59,7 @@ def extract_features(text, vocab, grammar, prep):
         "ratio_hsk6": vocab_result.get('level_counts', {}).get(6, 0) / max(1, len(tokens)),
 
 
-        "grammar_score": grammar_result.get("ttoal__grammar_score", 0),
+        "grammar_score": grammar_result.get("total_grammar_score", 0),
         "grammar_patterns_count": len(grammar_result.get("matched_rules", [])),
 
 
@@ -83,7 +87,7 @@ def train_model():
         feature_list.append(features)
 
     X = pd.DataFrame(feature_list)
-    y = df['label'].astype(int)
+    y = df['hsk_label'].astype(int)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -100,9 +104,9 @@ def train_model():
 
 
     all_preds = clf.predict(X)
-    df['Predicted_HSK_Level'] = all_preds
+    df['predicted_HSK_level'] = all_preds
 
-    output_cols = ['sample_sentence', 'total_score', 'hsk_label', 'predicted_HSK_level']
+    output_cols = ['sample_sentence', 'total_score', 'predicted_HSK_level']
     df[output_cols].to_csv(PREDICTIONS_OUTPUT_PATH, index=False)
 
 

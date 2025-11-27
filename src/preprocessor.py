@@ -9,7 +9,8 @@ class Preprocessor:
         if user_dict_path:
             jieba.load_userdict(user_dict_path)
     
-    def clean_text(self, text: str) -> str:
+    @staticmethod
+    def clean_text(text: str) -> str:
         clean_text = re.sub(r'\{.*?\}|\[.*?\]|[a-zA-Z0-9]', '', text)
         clean_text = re.sub(r'\s+', '', clean_text)
         clean_text = clean_text.replace('.+', '').replace('\\', '').strip()
