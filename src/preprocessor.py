@@ -1,5 +1,4 @@
 import jieba
-import pandas as pd
 import re
 import sys
 import os
@@ -10,18 +9,15 @@ class Preprocessor:
         if user_dict_path:
             jieba.load_userdict(user_dict_path)
     
-    @staticmethod
-    def clean_text(text):
+    def clean_text(self, text: str) -> str:
         clean_text = re.sub(r'\{.*?\}|\[.*?\]|[a-zA-Z0-9]', '', text)
         clean_text = re.sub(r'\s+', '', clean_text)
         clean_text = clean_text.replace('.+', '').replace('\\', '').strip()
         return clean_text
 
-    @staticmethod
-    def tokenize(text):
+    def tokenize(self, text: str) -> list[str]:
         return jieba.lcut(text)
 
-    @staticmethod
-    def split_sentences(text):
+    def split_sentences(self, text: str) -> list[str]:
         sentences = re.split(r'(?<=[。！？])', text)
         return [s for s in sentences if s]
